@@ -27,18 +27,22 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
+      <div>Add Room: </div>
+      <input type="text" id="roomID" value = "">
+      <button onclick="app.renderRoom()">Add Room</button>
       <select id = "roomSelect"> <!--Supplement an id here instead of using 'text'-->
         <option value="Lobby" selected>Lobby</option> 
       </select>
       
       <div> <!-- action is posting the text -->
         Message Here!<br>
-        <input type="text" id="firstname" value = "mickey">
+        <input type="text" id="message" value = "">
         <br>
         <button onclick="app.sendMessage()">Send</button>
       </div> 
     </div>
     <div id="chats">
+      <!-- "<script> var styleSettings = { 'background-image': "url('https:\/\/tinyurl.com/y8besbey')"}; $('body').css(styleSettings);</script>" -->
     </div>
   </body>
 </html>

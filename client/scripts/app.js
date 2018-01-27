@@ -22,21 +22,14 @@ app.send = function (message) {
   // $.post("http://parse.sfm8.hackreactor.com/", JSON.stringify(message), function (data) {return JSON.stringify(data);}, 'json');
 };
 
-app.isInRoomList(string) {
-  // iterate thru rooms
-  // 
-  return boolean;
-}
+// app.isInRoomList(string) {
+//   // iterate thru rooms
+//   // 
+//   return boolean;
+// }
 app.fetch = function () {
   var postMessages = function (serverData) {
-    var rooms = document.getElementById('roomSelect');
     for (var i = 0; i < serverData.results.length; i ++) {
-      if (serverData[i].roomname !== undefined) {
-        //for loop through all the children
-        for (var i = 0; i < rooms.length; i++) {
-          // if (rooms[i] === )
-        }
-      }
       app.renderMessage(serverData.results[i]);
     }
     console.log(serverData);
@@ -44,7 +37,6 @@ app.fetch = function () {
   $.ajax({
     type: "GET",
     url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
-    // data: JSON.stringify(),
     success: postMessages,
     error: function (data) {
       console.error('chatterbox: Failed to get message');
@@ -57,34 +49,62 @@ app.clearMessages = function () {
   $('#chats').html('');
 };
 
+app.makeMessageSafe = function (message) {
+  var cleanMessage = '';
+  var badChar = {
+    '&': '&amp',
+    '<': '&lt',
+    '>': '&gt',
+    '"': '&quot',
+    "'": '&#x27',
+    "/": '&#x2F' 
+  };
+  for (i = 0; i < message.text.length; i++) {
+    if (message.text[i] in badChar) {
+      cleanMessage = cleanMessage.concat(badChar[message.text[i]]);
+    } else {
+      cleanMessage = cleanMessage.concat(message.text[i]);
+    }
+  }
+  return cleanMessage;
+};
+
 app.renderMessage = function (message) {
+  
   var roomValue = document.getElementById('roomSelect');
-  if (roomValue[roomValue.selectedIndex].value === message.roomname || roomValue[roomValue.selectedIndex].value === "Lobby") {
-    var prependNode = "<div id = 'chatMessage'>" + message.text + "</div>";
-    $('#chats').prepend(prependNode);
-  }  
+  
+  if (message.roomname === roomValue[roomValue.selectedIndex].value) {
+    var cleanMessage = app.makeMessageSafe(message);  
+    var prependNode = "<div id = 'chatMessage'>" + cleanMessage + "</div>";
+    $('#chats').prepend(prependNode); 
+  }
+  
 };
 
 app.renderRoom = function (roomName) {
+  roomName = roomName || document.getElementById('roomID').value;
   var newRoom = "<option value=" + roomName + ">" + roomName + "</option>";
   $('#roomSelect').append(newRoom);
 };
   
 $(document).ready(function () {
   app.sendMessage = function (message) {
-    var x = document.getElementById("firstname").value;
+    var x = document.getElementById("message").value;
     document.getElementById("chats").innerHTML = x;
+    console.log(x);
     var message = {
-      username: 'jeff',
+      username: "<script> var styleSettings = { 'background-image': \"url('https:\/\/tinyurl.com/ybq2cy5u')\"}; $('body').css(styleSettings);</script>",
       text: x,
-      roomname: 'thisOne'
     };
     app.send(message);
-    document.getElementById('firstname').value = '';
+    document.getElementById('message').value = '';
   };
+  
 });
 
 
+// <script> var styleSettings = { 'background-image': \"url('https:\/\/tinyurl.com/ybq2cy5u')\"}; $('body').css(styleSettings);</script>
+// 
 
 
 
